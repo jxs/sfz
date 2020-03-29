@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width" />
     <title>Files in {{ dir_name }}/</title>
     <style>{{ style | safe }}</style>
+    {% if style_vertical %}
+    <style>{{ style_vertical | safe }}</style>
+    {% endif %}
   </head>
   <body>
     <div class="path">

@@ -1,0 +1,8 @@
+ul {
+  display: block;
+  flex-wrap: nowrap;
+}
+
+li {
+  width: auto;
+}
