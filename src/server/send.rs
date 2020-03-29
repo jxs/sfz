@@ -15,7 +15,17 @@ use ignore::WalkBuilder;
 use tera::{Context, Tera};
 
 use super::Item;
+use crate::cli::Theme;
 use crate::extensions::{PathExt, PathType};
+
+/// get theme based on the user input
+fn get_theme(input: Theme) -> &'static str {
+    match input.to_string().to_lowercase().as_ref() {
+        "default" => include_str!("themes/default.css"),
+        "vertical" => include_str!("themes/vertical.css"),
+        _ => unreachable!(),
+    }
+}
 
 /// Send a HTML page of all files under the path.
 ///
@@ -30,6 +40,7 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
     base_path: P2,
     show_all: bool,
     with_ignore: bool,
+    theme: Theme,
 ) -> io::Result<Vec<u8>> {
     let base_path = base_path.as_ref();
     let dir_path = dir_path.as_ref();
@@ -107,8 +118,7 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
     ctx.insert("files", &files);
     ctx.insert("dir_name", &dir_name);
     ctx.insert("paths", &paths);
-    ctx.insert("default_style", include_str!("themes/default.css"));
-    ctx.insert("theme_style", include_str!("themes/vertical.css"));
+    ctx.insert("theme", get_theme(theme));
     let page = Tera::one_off(include_str!("index.html"), &ctx, true)
         .unwrap_or_else(|e| format!("500 Internal server error: {}", e));
     Ok(Vec::from(page))

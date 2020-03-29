@@ -4,10 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Files in {{ dir_name }}/</title>
-    <style>{{ default_style | safe }}</style>
-    {% if theme_style %}
-    <style>{{ theme_style | safe }}</style>
-    {% endif %}
+    <style>{{ theme | safe }}</style>
   </head>
   <body>
     <div class="path">

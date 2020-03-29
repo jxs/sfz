@@ -11,9 +11,17 @@ use std::fs::canonicalize;
 use std::net::SocketAddr;
 use std::path::PathBuf;
 
-use clap::{value_t, App};
+use clap::{arg_enum, value_t, App};
 
 use crate::BoxResult;
+
+arg_enum! {
+    #[derive(Copy, Clone, Debug, PartialEq)]
+    pub enum Theme {
+        Default,
+        Vertical,
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct Args {
@@ -28,6 +36,7 @@ pub struct Args {
     pub follow_links: bool,
     pub render_index: bool,
     pub log: bool,
+    pub theme: Theme,
 }
 
 impl Args {
@@ -50,6 +59,7 @@ impl Args {
         let follow_links = matches.is_present("follow-links");
         let render_index = matches.is_present("render-index");
         let log = !matches.is_present("no-log");
+        let theme = value_t!(matches.value_of("theme"), Theme)?;
 
         Ok(Args {
             address,
@@ -63,6 +73,7 @@ impl Args {
             follow_links,
             render_index,
             log,
+            theme,
         })
     }
 
