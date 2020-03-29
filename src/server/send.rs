@@ -107,8 +107,8 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
     ctx.insert("files", &files);
     ctx.insert("dir_name", &dir_name);
     ctx.insert("paths", &paths);
-    ctx.insert("style", include_str!("style.css"));
-    ctx.insert("style_vertical", include_str!("style_vertical.css"));
+    ctx.insert("default_style", include_str!("themes/default.css"));
+    ctx.insert("theme_style", include_str!("themes/vertical.css"));
     let page = Tera::one_off(include_str!("index.html"), &ctx, true)
         .unwrap_or_else(|e| format!("500 Internal server error: {}", e));
     Ok(Vec::from(page))
