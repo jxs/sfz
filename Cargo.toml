@@ -33,7 +33,7 @@ serde = { version = "1.0", features = ["derive"] } # For tera serializing variab
 ignore = "0.4" # Respect to .gitignore while listing directories.
 # Logging
 chrono = "0.4"
-askama = { git = "https://github.com/djc/askama.git" }
+askama = { git = "https://github.com/jxs/askama.git", branch = "bugfix/urlencode" }
 
 [dev-dependencies]
 tempdir = "0.3"
