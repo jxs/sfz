@@ -29,12 +29,11 @@ unicase = "2.5" # Dependency for Hyper CORS headers
 # Compression
 brotli = "3"
 flate2 = { version = "1.0", features = ["rust_backend"], default-features = false }
-# Rendering
-tera = "0.11"
 serde = { version = "1.0", features = ["derive"] } # For tera serializing variables to template.
 ignore = "0.4" # Respect to .gitignore while listing directories.
 # Logging
 chrono = "0.4"
+askama = "0.9.0"
 
 [dev-dependencies]
 tempdir = "0.3"
