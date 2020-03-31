@@ -1,3 +1,4 @@
+{% include "themes/default.css" %}
 ul {
   display: block;
   flex-wrap: nowrap;
@@ -5,5 +6,5 @@ ul {
 
 li {
   width: auto;
-  padding: .4em .4em .4em 1em;
+  padding: 0 .4em .4em 1em;
 }
