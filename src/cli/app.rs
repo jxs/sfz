@@ -76,6 +76,11 @@ pub fn app() -> App<'static, 'static> {
         .default_value("default")
         .help("Select theme, possible choices are: default, vertical");
 
+    let arg_path_prefix = Arg::with_name("path-prefix")
+        .long("path-prefix")
+        .help("Specify an url path prefix, helpful when running behing a reverse proxy")
+        .value_name("path");
+
     app_from_crate!()
         .about(ABOUT)
         .arg(arg_address)
@@ -90,4 +95,5 @@ pub fn app() -> App<'static, 'static> {
         .arg(arg_follow_links)
         .arg(arg_render_index)
         .arg(arg_theme)
+        .arg(arg_path_prefix)
 }

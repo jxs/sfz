@@ -35,12 +35,14 @@ struct IndexTemplate<'a> {
 /// * `base_path` - The base path resolving all filepaths under `dir_path`.
 /// * `show_all` - Whether to show hidden and 'dot' files.
 /// * `with_ignore` - Whether to respet gitignore files.
+/// * `path_prefix` - The url path prefix optionally defined
 pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
     dir_path: P1,
     base_path: P2,
     show_all: bool,
     with_ignore: bool,
     theme: Theme,
+    path_prefix: Option<&str>,
 ) -> io::Result<Vec<u8>> {
     let base_path = base_path.as_ref();
     let dir_path = dir_path.as_ref();
@@ -48,6 +50,7 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
     let (dir_name, paths) = {
         let dir_name = base_path.filename_str();
         let path = dir_path.strip_prefix(base_path).unwrap();
+
         let path_names = path.iter().map(|s| s.to_str().unwrap());
         let abs_paths = path
             .iter()
@@ -77,7 +80,13 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
             // Get relative path.
             let rel_path = abs_path.strip_prefix(base_path).unwrap();
             // Add "/" prefix to construct absolute hyperlink.
-            let path = format!("/{}", rel_path.to_str().unwrap_or_default());
+            let path = match path_prefix {
+                Some(path_prefix) => {
+                    format!("{}/{}", path_prefix, rel_path.to_str().unwrap_or_default())
+                }
+                None => format!("/{}", rel_path.to_str().unwrap_or_default()),
+            };
+
             Item {
                 path_type: abs_path.type_(),
                 name: rel_path.filename_str().to_owned(),

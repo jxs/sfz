@@ -37,6 +37,7 @@ pub struct Args {
     pub render_index: bool,
     pub log: bool,
     pub theme: Theme,
+    pub path_prefix: Option<String>,
 }
 
 impl Args {
@@ -59,7 +60,12 @@ impl Args {
         let follow_links = matches.is_present("follow-links");
         let render_index = matches.is_present("render-index");
         let log = !matches.is_present("no-log");
+
         let theme = value_t!(matches.value_of("theme"), Theme)?;
+
+        let path_prefix = matches
+            .value_of("path-prefix")
+            .and_then(|p| Some(p.to_owned()));
 
         Ok(Args {
             address,
@@ -74,6 +80,7 @@ impl Args {
             render_index,
             log,
             theme,
+            path_prefix,
         })
     }
 
