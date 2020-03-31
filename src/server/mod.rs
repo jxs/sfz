@@ -31,7 +31,7 @@ use serde::Serialize;
 use unicase::Ascii;
 
 use self::send::{send_dir, send_file, send_file_with_range};
-use crate::cli::{Args, Theme};
+use crate::cli::Args;
 use crate::extensions::{MimeExt, PathExt, PathType, SystemTimeExt};
 use crate::http::conditional_requests::{is_fresh, is_precondition_failed};
 use crate::http::content_encoding::{compress, get_prior_encoding};
@@ -353,6 +353,7 @@ mod tests {
     use super::*;
     use std::fs::File;
     use tempdir::TempDir;
+    use crate::cli::Theme;
 
     impl Default for Args {
         fn default() -> Self {
