@@ -12,9 +12,9 @@
         {% if loop.last %}
           <b>{{ path.0 }}</b>
         {% else if loop.first && !loop.last %}
-          <a href="{{ path.1|urlencode }}"><b>{{ path.0 }}</b></a>
+          <a href="{{ path.1|urlencode|safe }}"><b>{{ path.0 }}</b></a>
         {% else %}
-          <a href="{{ path.1|urlencode }}">{{ path.0 }}</a>
+          <a href="{{ path.1|urlencode|safe }}">{{ path.0 }}</a>
         {% endif %}
         <span class="separator">/</span>
       {% endfor %}
@@ -35,7 +35,7 @@
           {% endmatch %}
           </div>
 
-          <a href="{{ file.path|urlencode }}">{{ file.name }}</a>
+          <a href="{{ file.path|urlencode|safe }}">{{ file.name }}</a>
         </li>
       {% endfor %}
     </ul>
