@@ -11,11 +11,21 @@ use std::fs::File;
 use std::io::{self, BufReader};
 use std::path::{Path, PathBuf};
 
+use askama::Template;
 use ignore::WalkBuilder;
-use tera::{Context, Tera};
 
 use super::Item;
+use crate::cli::Theme;
 use crate::extensions::{PathExt, PathType};
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate<'a> {
+    files: Vec<Item>,
+    dir_name: &'a str,
+    paths: Vec<(&'a str, String)>,
+    theme: Theme,
+}
 
 /// Send a HTML page of all files under the path.
 ///
@@ -30,6 +40,7 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
     base_path: P2,
     show_all: bool,
     with_ignore: bool,
+    theme: Theme,
 ) -> io::Result<Vec<u8>> {
     let base_path = base_path.as_ref();
     let dir_path = dir_path.as_ref();
@@ -102,14 +113,16 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
     // Sort files (dir-first and lexicographic ordering).
     files.sort_unstable();
 
-    // Render page with Tera template engine.
-    let mut ctx = Context::new();
-    ctx.insert("files", &files);
-    ctx.insert("dir_name", &dir_name);
-    ctx.insert("paths", &paths);
-    ctx.insert("style", include_str!("style.css"));
-    let page = Tera::one_off(include_str!("index.html"), &ctx, true)
-        .unwrap_or_else(|e| format!("500 Internal server error: {}", e));
+    // Render page with Askama template engine.
+    let page = IndexTemplate {
+        files,
+        dir_name,
+        paths,
+        theme,
+    }
+    .render()
+    .unwrap_or_else(|e| format!("500 Internal server error: {}", e));
+
     Ok(Vec::from(page))
 }
 

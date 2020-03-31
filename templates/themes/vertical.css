@@ -1,0 +1,10 @@
+{% include "themes/default.css" %}
+ul {
+  display: block;
+  flex-wrap: nowrap;
+}
+
+li {
+  width: auto;
+  padding: 0 .4em .4em 1em;
+}

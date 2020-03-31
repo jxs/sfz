@@ -227,7 +227,13 @@ impl MyService {
 
         // Extra process for serving files.
         if path.is_dir() {
-            body = send_dir(path, &self.args.path, self.args.all, self.args.ignore);
+            body = send_dir(
+                path,
+                &self.args.path,
+                self.args.all,
+                self.args.ignore,
+                self.args.theme,
+            );
         } else {
             // Cache-Control.
             self.enable_cache_control(&mut res);

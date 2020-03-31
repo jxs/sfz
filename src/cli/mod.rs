@@ -10,4 +10,4 @@ mod app;
 mod args;
 
 pub use self::app::app;
-pub use self::args::Args;
+pub use self::args::{Args, Theme};

@@ -71,6 +71,11 @@ pub fn app() -> App<'static, 'static> {
         .long("--render-index")
         .help("Render existing index.html when requesting a directory.");
 
+    let arg_theme = Arg::with_name("theme")
+        .long("--theme")
+        .default_value("default")
+        .help("Select theme, possible choices are: default, vertical");
+
     app_from_crate!()
         .about(ABOUT)
         .arg(arg_address)
@@ -84,4 +89,5 @@ pub fn app() -> App<'static, 'static> {
         .arg(arg_no_log)
         .arg(arg_follow_links)
         .arg(arg_render_index)
+        .arg(arg_theme)
 }
