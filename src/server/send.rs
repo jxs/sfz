@@ -47,6 +47,8 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
     let base_path = base_path.as_ref();
     let dir_path = dir_path.as_ref();
     // Prepare dirname of current dir relative to base path.
+    let prefix = path_prefix.unwrap_or("");
+
     let (dir_name, paths) = {
         let dir_name = base_path.filename_str();
         let path = dir_path.strip_prefix(base_path).unwrap();
@@ -60,9 +62,15 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
             })
             .map(|s| format!("/{}", s.to_str().unwrap()));
         // Tuple structure: (name, path)
-        let paths = vec![(dir_name, String::from("/"))]
+        let paths = vec![(dir_name, String::new())];
+
+        let paths = paths
             .into_iter()
             .chain(path_names.zip(abs_paths))
+            .map(|mut p| {
+                p.1 = format!("{}/{}", prefix, p.1);
+                p
+            })
             .collect::<Vec<_>>();
         (dir_name, paths)
     };
@@ -79,13 +87,12 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
             let abs_path = entry.path();
             // Get relative path.
             let rel_path = abs_path.strip_prefix(base_path).unwrap();
+            let rel_path_ref = rel_path.to_str().unwrap_or_default();
             // Add "/" prefix to construct absolute hyperlink.
-            let path = match path_prefix {
-                Some(path_prefix) => {
-                    format!("{}/{}", path_prefix, rel_path.to_str().unwrap_or_default())
-                }
-                None => format!("/{}", rel_path.to_str().unwrap_or_default()),
-            };
+            // if there's a path_prefix prefixit
+            let path = path_prefix.map_or(format!("{}", rel_path_ref), |path_prefix| {
+                format!("{}/{}", path_prefix, rel_path_ref)
+            });
 
             Item {
                 path_type: abs_path.type_(),
@@ -100,8 +107,10 @@ pub fn send_dir<P1: AsRef<Path>, P2: AsRef<Path>>(
     } else {
         // CWD == sub dir of base dir
         // Append an item for popping back to parent directory.
+
         let path = format!(
-            "/{}",
+            "{}/{}",
+            prefix,
             dir_path
                 .parent()
                 .unwrap()

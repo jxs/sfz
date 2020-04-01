@@ -27,11 +27,11 @@ use crate::server::serve;
 pub type BoxResult<T> = Result<T, Box<dyn Error>>;
 
 fn main() {
-
     //TODO remove when figured why application doesn't respond to SIGINT
     ctrlc::set_handler(move || {
         std::process::exit(0);
-    }).expect("failed setting interrupt handler");
+    })
+    .expect("failed setting interrupt handler");
 
     let result = Args::parse(app()).map(Arc::new).and_then(serve);
     match result {
