@@ -351,9 +351,9 @@ impl MyService {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::cli::Theme;
     use std::fs::File;
     use tempdir::TempDir;
-    use crate::cli::Theme;
 
     impl Default for Args {
         fn default() -> Self {

@@ -13,5 +13,4 @@ RUN cargo build --release --locked --target=x86_64-unknown-linux-musl
 FROM alpine:3
 COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/release/sfz /app/
 
-EXPOSE 8080
 ENTRYPOINT ["/app/sfz"]
